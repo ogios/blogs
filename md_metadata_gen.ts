@@ -1,67 +1,20 @@
 import fs from "fs-extra";
-import { lexer } from "marked";
-import type { Token } from "marked";
-
-function getText(tokens: Token[]): string {
-  for (let i = 0; i < tokens.length; i++)
-    if (tokens[i].type === "text") return (tokens[i] as any).text;
-}
-
-function getTitle(src: string) {
-  const tokens = lexer(src);
-  const headings: Record<number, string> = {};
-  for (let i = 0; i < tokens.length; i++) {
-    const l = tokens[i];
-    let text: string;
-    l.type === "heading" &&
-      headings[l.depth] === undefined &&
-      l.tokens &&
-      l.tokens.length > 0 &&
-      (text = getText(l.tokens)) &&
-      (headings[l.depth] = text);
-  }
-  return headings[Math.min(...Object.keys(headings).map((v) => parseInt(v)))];
-}
-
-type Meta = Record<
-  string,
-  {
-    title: string;
-    createdAt: number;
-    updatedAt: number;
-    hash: string;
-  }
->;
-
-export function getMDIndexs() {
-  const a = fs.readdirSync("./");
-  const map: string[] = [];
-  for (let i = 0; i < a.length; i++) {
-    const f = a[i];
-    if (fs.statSync(f).isDirectory()) continue;
-    else {
-      const rg = /^((?!0\d)\d+)\.md/i;
-      const res = rg.exec(f);
-      if (res && res.length > 0) {
-        map.push(res[1]);
-      }
-    }
-  }
-  return map;
-}
+import { type Meta, getTitle, getMDIndexs, withMeta } from "./utils";
 
 function main() {
-  const metaPath = "./meta.json";
-  fs.ensureFile(metaPath);
-  const meta: Meta =
-    JSON.parse(fs.readFileSync(metaPath).toString() || "{}") || {};
+  const meta: Meta = withMeta((metaFile) => {
+    return JSON.parse(fs.readFileSync(metaFile).toString() || "{}") || {};
+  });
   console.log(meta);
-  const map = getMDIndexs();
+  const map = getMDIndexs(new RegExp(meta.regexPattern));
   console.log(map);
-  const newMeta: Meta = {};
+  const newMeta: Meta = {
+    regexPattern: meta.regexPattern,
+  };
   const currentTime = new Date().getTime();
-  for (const key in map) {
-    if (map.hasOwnProperty(key)) {
+  for (const index in map) {
+    if (map.hasOwnProperty(index)) {
+      const key = map[index];
       const old = meta[key];
       const content = fs.readFileSync(`${key}.md`).toString();
       const title = getTitle(content);
@@ -85,7 +38,9 @@ function main() {
     }
   }
   console.log(newMeta);
-  fs.writeFileSync(metaPath, JSON.stringify(newMeta));
+  withMeta((metaFile) => {
+    fs.writeFileSync(metaFile, JSON.stringify(newMeta));
+  });
 }
 
 main();
