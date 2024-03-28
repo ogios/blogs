@@ -43,5 +43,5 @@ function onlyPreserve(patterns: string[], cwd: string) {
   });
 }
 
-onlyPreserve(["*.md", "meta.json"], "./dist/blogs/");
-rmStuff(["README.md"], "./dist/blogs/");
+onlyPreserve(["*.md", "meta.json"], "./");
+rmStuff(["README.md"], "./");
