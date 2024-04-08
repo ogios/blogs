@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import path from "path";
+import { BLOG_PATH, ROOT_PATH } from "./utils";
 
 function rmStuff(patterns: string[], cwd: string) {
   const l: string[] = (() => {
@@ -43,5 +44,5 @@ function onlyPreserve(patterns: string[], cwd: string) {
   });
 }
 
-onlyPreserve(["*.md", "meta.json"], "./");
-rmStuff(["README.md"], "./");
+onlyPreserve([BLOG_PATH], ROOT_PATH);
+onlyPreserve(["*.md", "meta.json"], BLOG_PATH);

@@ -1,5 +1,5 @@
 import fs from "fs-extra";
-import { type Meta, getTitle, getMDIndexs, withMeta } from "./utils";
+import { type Meta, getTitle, getMDIndexs, withMeta, withBlog } from "./utils";
 
 function main() {
   const meta: Meta = withMeta((metaFile) => {
@@ -16,7 +16,9 @@ function main() {
     if (map.hasOwnProperty(index)) {
       const key = map[index];
       const old = meta[key];
-      const content = fs.readFileSync(`${key}.md`).toString();
+      const content = withBlog((f) => {
+        return fs.readFileSync(f).toString();
+      }, key);
       const title = getTitle(content);
       const hash = new Bun.CryptoHasher("sha256").update(content).digest("hex");
       if (!old) {

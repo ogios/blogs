@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build:submodule": "bun --bun run remove_scripts.ts"
+    "build:submodule": "bun run b",
+    "b": "cd scripts && ./r.sh",
+    "c": "cd scripts && ./c.sh",
+    "g": "cd scripts && ./g.sh"
   },
   "devDependencies": {
     "@types/bun": "^1.0.7",
