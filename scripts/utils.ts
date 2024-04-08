@@ -9,7 +9,7 @@ export const META_PATH = path.join(BLOG_PATH, "meta.json");
 
 console.log(ROOT_PATH, BLOG_PATH, META_PATH);
 
-export type Meta = { regexPattern: string } & Record<
+export type Meta = Record<
   number,
   {
     title: string;
@@ -32,7 +32,10 @@ export function withMeta<T>(func: (metaFile: number) => T): T {
 }
 
 export function getBlogPath(blogKey: number | string) {
-  return path.join(BLOG_PATH, `${blogKey}.md`);
+  return path.join(
+    BLOG_PATH,
+    `${blogKey}${typeof blogKey === "string" ? (blogKey.endsWith(".md") ? "" : ".md") : ".md"}`,
+  );
 }
 
 export function withBlog<T>(
@@ -66,13 +69,14 @@ export function getTitle(src: string) {
   return headings[Math.min(...Object.keys(headings).map((v) => parseInt(v)))];
 }
 
-export function getMDIndexs(pattern: RegExp) {
+export const MD_PATTERN = "((?!0\\d)\\d+)\\.md";
+
+export function getMDIndexs(pattern: RegExp = new RegExp(MD_PATTERN)) {
   const a = fs.readdirSync(BLOG_PATH);
   const map: string[] = [];
   for (let i = 0; i < a.length; i++) {
     const f = a[i];
-    console.log(i);
-    if (fs.statSync(getBlogPath(f)).isDirectory()) continue;
+    if (fs.statSync(path.join(BLOG_PATH, f)).isDirectory()) continue;
     else {
       const rg = pattern;
       const res = rg.exec(f);

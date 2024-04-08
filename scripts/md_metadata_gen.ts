@@ -6,11 +6,9 @@ function main() {
     return JSON.parse(fs.readFileSync(metaFile).toString() || "{}") || {};
   });
   console.log(meta);
-  const map = getMDIndexs(new RegExp(meta.regexPattern));
+  const map = getMDIndexs();
   console.log(map);
-  const newMeta: Meta = {
-    regexPattern: meta.regexPattern,
-  };
+  const newMeta: Meta = {};
   const currentTime = new Date().getTime();
   for (const index in map) {
     if (map.hasOwnProperty(index)) {
