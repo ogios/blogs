@@ -5,6 +5,9 @@ import path from "path";
 
 export const ROOT_PATH = path.dirname(path.dirname(import.meta.path));
 export const BLOG_PATH = path.join(ROOT_PATH, "blogs/");
+export const META_PATH = path.join(BLOG_PATH, "meta.json");
+
+console.log(ROOT_PATH, BLOG_PATH, META_PATH);
 
 export type Meta = { regexPattern: string } & Record<
   number,
@@ -15,8 +18,6 @@ export type Meta = { regexPattern: string } & Record<
     hash: string;
   }
 >;
-
-export const META_PATH = path.join(BLOG_PATH, "meta.json");
 
 export function getMeta() {
   fs.ensureFileSync(META_PATH);
@@ -30,11 +31,15 @@ export function withMeta<T>(func: (metaFile: number) => T): T {
   return res;
 }
 
+export function getBlogPath(blogKey: number | string) {
+  return path.join(BLOG_PATH, `${blogKey}.md`);
+}
+
 export function withBlog<T>(
   func: (blogFile: number) => T,
   blogKey: number | string,
 ): T {
-  const blogFile = fs.openSync(path.join(BLOG_PATH, `${blogKey}.md`), "r+");
+  const blogFile = fs.openSync(getBlogPath(blogKey), "r+");
   const res = func(blogFile);
   fs.closeSync(blogFile);
   return res;
@@ -66,7 +71,8 @@ export function getMDIndexs(pattern: RegExp) {
   const map: string[] = [];
   for (let i = 0; i < a.length; i++) {
     const f = a[i];
-    if (fs.statSync(f).isDirectory()) continue;
+    console.log(i);
+    if (fs.statSync(getBlogPath(f)).isDirectory()) continue;
     else {
       const rg = pattern;
       const res = rg.exec(f);
