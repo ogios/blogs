@@ -16,7 +16,7 @@ function rmStuff(patterns: string[], cwd: string) {
 
 function globFiles(pattern: string, cwd?: string) {
   const a = new Bun.Glob(pattern);
-  const res = a.scanSync({ cwd, dot: true });
+  const res = a.scanSync({ cwd, dot: true, onlyFiles: false });
   const l: string[] = [];
   let r = res.next();
   while (!r.done) {
@@ -39,10 +39,11 @@ function onlyPreserve(patterns: string[], cwd: string) {
   const remove = all
     .map((v) => (preserve.indexOf(v) === -1 ? v : undefined))
     .filter((v) => v);
+  console.log(preserve, remove);
   remove.forEach((v) => {
     fs.removeSync(path.join(cwd, v));
   });
 }
 
-onlyPreserve([BLOG_PATH], ROOT_PATH);
+onlyPreserve(["blogs"], ROOT_PATH);
 onlyPreserve(["*.md", "meta.json"], BLOG_PATH);

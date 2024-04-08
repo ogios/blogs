@@ -16,5 +16,5 @@ root=$scripts/..
 blogs=$root/blogs
 
 bun run "$scripts"/remove_scripts.ts
-mv "$blogs"/* "$root"
-rm -r "$blogs"
+# mv "$blogs"/* "$root"
+# rm -r "$blogs"
