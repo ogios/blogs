@@ -12,7 +12,7 @@ get_abs_filepath() {
 	fi
 }
 scripts=$(dirname "$(get_abs_filepath)")
-root=$scripts/..
+root=$(dirname "$scripts")
 blogs=$root/blogs
 
 bun run "$scripts"/remove_scripts.ts
