@@ -1,0 +1,18 @@
+name: notify ogios.github.io to update submodules and deploy
+
+on:
+  push:
+    paths:
+      - "blogs/meta.json"
+  workflow_dispatch:
+
+jobs:
+  send_repository_dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.OGIOS_GITHUBIO_WORKFLOW }}
+          repository: ogios/ogios.github.io
+          event-type: build
