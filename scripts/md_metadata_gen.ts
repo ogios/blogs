@@ -39,7 +39,7 @@ function main() {
   }
   console.log(newMeta);
   withMeta((metaFile) => {
-    fs.writeFileSync(metaFile, JSON.stringify(newMeta));
+    fs.writeFileSync(metaFile, JSON.stringify(newMeta, null, 2));
   });
 }
 

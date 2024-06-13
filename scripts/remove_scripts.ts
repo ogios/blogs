@@ -45,5 +45,16 @@ function onlyPreserve(patterns: string[], cwd: string) {
   });
 }
 
+function minifyMeta() {
+  const metaPath = path.join(BLOG_PATH, "meta.json");
+  fs.writeFileSync(
+    metaPath,
+    JSON.stringify(
+      JSON.parse(fs.readFileSync(path.join(BLOG_PATH, "meta.json")).toString()),
+    ),
+  );
+}
+
 onlyPreserve(["blogs"], ROOT_PATH);
 onlyPreserve(["*.md", "meta.json"], BLOG_PATH);
+minifyMeta();
