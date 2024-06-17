@@ -44,8 +44,8 @@
   "7": {
     "title": " Rust tips",
     "createdAt": 1717928731260,
-    "updatedAt": 1718550653932,
-    "hash": "76b2bf676a557a307bc47a5946e0aff285452f8715b981fdd0fa122553d141a1"
+    "updatedAt": 1718606414013,
+    "hash": "5f41e77ecbbf8777cc260669379ef2283b879c7fa842f2ab17069106805bfbfa"
   },
   "8": {
     "title": "Manage multiple accounts bind with different ssh keys on same machine",
@@ -58,5 +58,11 @@
     "createdAt": 1718112302619,
     "updatedAt": 1718247281512,
     "hash": "ba4627759a7dcd17f3aa7a893fc3a06ceee326ff5b20a5f5a288f103b9f4f139"
+  },
+  "10": {
+    "title": "Build gtk apps with gtk apps",
+    "createdAt": 1718606414013,
+    "updatedAt": 1718606414013,
+    "hash": "c57c125621287c283eec78a39ff62f11246773781efc4ba1237cee7fe0849e73"
   }
 }
